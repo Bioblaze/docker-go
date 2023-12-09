@@ -3,8 +3,8 @@ name: integration-test
 on: [workflow_call]
 
 env:
-  DOCKER_USERNAME: '${{ secrets.DOCKER_USERNAME }}'
-  DOCKER_REPO: '${{ secrets.DOCKER_REPO }}'
+  DOCKER_USERNAME: 'bioblaze'
+  DOCKER_REPO: 'docker-go'
 
 jobs:
   docker:
@@ -28,9 +28,9 @@ jobs:
           load: true
           tags: ${{ env.TEST_TAG }}
         env:
-          TEST_TAG: ${{ env.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:${{ env.sha_short }}
+          TEST_TAG: ${{ env.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:test-${{ env.sha_short }}
       - name: Test
         run: |
           docker exec -it ${{ env.TEST_TAG }} echo $(go version)
         env:
-          TEST_TAG: ${{ env.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:${{ env.sha_short }}
+          TEST_TAG: ${{ env.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:test-${{ env.sha_short }}
