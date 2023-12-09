@@ -30,7 +30,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ env.SHA_TAG }},${{ env.LATEST_TAG }}
+          tags: ${{ env.LATEST_TAG }}
         env:
-          SHA_TAG: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:${{ env.sha_short }}
-          LATEST_TAG: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
+          LATEST_TAG: ${{ secrets.DIGITAL_OCEAN_REGISTRY_URL }}/${{ secrets.DIGITAL_OCEAN_REGISTRY_ENDPOINT }}/${{ secrets.DOCKER_REPO }}:latest
