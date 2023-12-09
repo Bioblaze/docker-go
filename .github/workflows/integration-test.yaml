@@ -1,0 +1,31 @@
+name: integration-test
+
+on: [workflow_call]
+
+env:
+  DOCKER_USERNAME: bioblaze
+  DOCKER_REPO: docker-go
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set enviroment
+        shell: bash
+        run: |
+          echo "sha_short=$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
+          echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> "$GITHUB_ENV"
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and export to Docker
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          load: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:test-${{ env.sha_short }}
+      - name: Test
+        run: |
+          docker run --rm ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:test-${{ env.sha_short }}
