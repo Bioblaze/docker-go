@@ -2,12 +2,9 @@ name: integration-test
 
 on: [workflow_call]
 
-env:
-  DOCKER_USERNAME: 'bioblaze'
-  DOCKER_REPO: 'docker-go'
-
 jobs:
-  docker:
+  build:
+    name: Build & Test for (go version)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,7 +20,7 @@ jobs:
           push: false
           tags: ${{ env.TEST_TAG }}
         env:
-          TEST_TAG: ${{ env.DOCKER_REPO }}:test-${{ env.sha_short }}
+          TEST_TAG: ${{ secrets.DOCKER_REPO }}:test-${{ env.sha_short }}
       - name: Running Test (go version)
         uses: addnab/docker-run-action@v3
         with:
@@ -31,4 +28,4 @@ jobs:
           run: |
             echo $(go version)
         env:
-          TEST_TAG: ${{ env.DOCKER_REPO }}:test-${{ env.sha_short }}
+          TEST_TAG: ${{ secrets.DOCKER_REPO }}:test-${{ env.sha_short }}

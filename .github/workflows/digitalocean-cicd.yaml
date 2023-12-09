@@ -1,18 +1,11 @@
 name: DigitalOcean CI
 
-on:
-  push:
-    branches:
-      - "main"
-env:
-  DOCKER_USERNAME: '${{ secrets.DOCKER_USERNAME }}'
-  DOCKER_REPO: '${{ secrets.DOCKER_REPO }}'
+on: [workflow_call]
+
 
 jobs:
-  tests:
-    uses: ./.github/workflows/integration-test.yaml
-    secrets: inherit
   docker:
+    name: Deploying to Digitalocean
     runs-on: ubuntu-latest
     needs: [tests]
     steps:
@@ -40,5 +33,5 @@ jobs:
           push: true
           tags: ${{ env.SHA_TAG }},${{ env.LATEST_TAG }}
         env:
-          SHA_TAG: ${{ env.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:${{ env.sha_short }}
-          LATEST_TAG: ${{ env.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:latest
+          SHA_TAG: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:${{ env.sha_short }}
+          LATEST_TAG: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
