@@ -2,9 +2,6 @@ name: integration-test
 
 on: [workflow_call]
 
-env:
-  DOCKER_USERNAME: bioblaze
-  DOCKER_REPO: docker-go
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -25,7 +22,11 @@ jobs:
         with:
           context: .
           load: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:test-${{ env.sha_short }}
+          tags: ${{ env.TEST_TAG }}
+        env:
+          TEST_TAG: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:${{ env.sha_short }}
       - name: Test
         run: |
-          docker run --rm ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:test-${{ env.sha_short }}
+          docker run --rm ${{ env.TEST_TAG }}
+        env:
+          TEST_TAG: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:${{ env.sha_short }}
