@@ -3,8 +3,8 @@ name: integration-test
 on: [workflow_call]
 
 env:
-  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  DOCKER_REPO: ${{ secrets.DOCKER_REPO }}
+  DOCKER_USERNAME: '${{ secrets.DOCKER_USERNAME }}'
+  DOCKER_REPO: '${{ secrets.DOCKER_REPO }}'
 
 jobs:
   docker:
