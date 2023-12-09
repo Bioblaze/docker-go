@@ -31,6 +31,6 @@ jobs:
           TEST_TAG: ${{ env.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:test-${{ env.sha_short }}
       - name: Test
         run: |
-          docker exec -it ${{ env.TEST_TAG }} echo $(go version)
+          docker exec -it docker.io/${{ env.TEST_TAG }} echo $(go version)
         env:
           TEST_TAG: ${{ env.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:test-${{ env.sha_short }}
